@@ -16,5 +16,5 @@ def order():
 def process_order():
     pizza = request.form["pizza"]
     message = request.form["message"]
-    return render_template("result.html", pizza=pizza,
-                                          message=message)
+    return render_template("result.html",   pizza=pizza,
+                                            message=message)
