@@ -1,11 +1,16 @@
 from flask import Flask
 from flask import render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///tsoha"
+db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-    restaurants = ["Pizzeria", "Sushi restaurant", "Cafe"]
+    result = db.session.execute(text("SELECT name FROM restaurants"))
+    restaurants = result.fetchall()
     return render_template("index.html", restaurants=restaurants)
 
 @app.route("/order")

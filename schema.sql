@@ -8,7 +8,7 @@ CREATE TABLE users (
 CREATE TABLE restaurants (
 	id SERIAL PRIMARY KEY,
 	name TEXT
-)
+);
 CREATE TABLE forms (
     id SERIAL PRIMARY KEY,
 	restaurant_id INTEGER REFERENCES restaurants,
@@ -19,7 +19,7 @@ CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users,
 	restaurant_id INTEGER REFERENCES restaurants,
-    order TEXT,
+    ordered_food TEXT,
 	price INTEGER,
     logged_at TIMESTAMP
 );
