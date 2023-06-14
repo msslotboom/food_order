@@ -4,11 +4,9 @@
 	<br>
 	Tee tilauksesi:
 	<p>
-		<input type="radio" name="pizza" value="1"> Frutti di Mare
-		<input type="radio" name="pizza" value="2"> Margherita
-		<input type="radio" name="pizza" value="3"> Quattro Formaggi
-		<input type="radio" name="pizza" value="4"> Quattro Stagioni
-		<input type="radio" name="pizza" value="5"> Vegaani
+		{% for option in form %}
+		<input type="radio" name="pizza" value={{loop.index0}}> {{ option }}
+		{% endfor %}
 	<p>
 	Lisää kommentti:
 	<input type="text", name="message">

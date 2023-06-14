@@ -14,9 +14,12 @@ def index():
     restaurants = result.fetchall()
     return render_template("index.html", restaurants=restaurants)
 
-@app.route("/order")
-def order():
-    return render_template("order.html")
+@app.route("/order/<int:order_id>")
+def order(order_id):
+    sql = ("SELECT fields FROM forms WHERE id=:id")
+    form = db.session.execute(text(sql), {"id":order_id}).fetchone()[0].split(";")
+    print(form)
+    return render_template("order.html", form=form)
 
 @app.route("/order", methods=["POST"])
 def process_order():
