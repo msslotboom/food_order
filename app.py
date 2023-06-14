@@ -12,7 +12,17 @@ db = SQLAlchemy(app)
 def index():
     result = db.session.execute(text("SELECT name FROM restaurants"))
     restaurants = result.fetchall()
+    print(restaurants)
     return render_template("index.html", restaurants=restaurants)
+
+@app.route("/restaurant/<int:restaurant_id>")
+def restaurant_page(restaurant_id):
+    name_sql = ("SELECT name FROM restaurants WHERE id=:id")
+    order_sql = ("SELECT id FROM forms WHERE restaurant_id=:restaurant_id")
+    name = db.session.execute(text(name_sql), {"id":restaurant_id}).fetchone()[0]
+    order_id = db.session.execute(text(order_sql), {"restaurant_id":restaurant_id}).fetchone()[0]
+    print(name, order_id)
+    return render_template("restaurant.html", restaurant_name=name, order_id=order_id)
 
 @app.route("/order/<int:order_id>")
 def order(order_id):
