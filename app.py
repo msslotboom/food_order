@@ -21,5 +21,8 @@ def order():
 def process_order():
     pizza = request.form["pizza"]
     message = request.form["message"]
+    sql = "INSERT INTO orders (user_id, restaurant_id, ordered_food, price) VALUES (:user_id, :restaurant_id, :ordered_food, :price)"
+    db.session.execute(text(sql), {"user_id":1, "restaurant_id":3, "ordered_food":message, "price":15})
+    db.session.commit()
     return render_template("result.html",   pizza=pizza,
                                             message=message)
