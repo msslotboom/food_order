@@ -1,25 +1,34 @@
-CREATE TABLE users (
+CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
 	admin BOOLEAN
 );
 
-CREATE TABLE restaurants (
+CREATE TABLE Restaurants (
 	id SERIAL PRIMARY KEY,
 	name TEXT
 );
-CREATE TABLE forms (
+CREATE TABLE MenuItems (
     id SERIAL PRIMARY KEY,
-	restaurant_id INTEGER REFERENCES restaurants,
-    fields TEXT
+	restaurant_id INTEGER REFERENCES Restaurants,
+    item_name TEXT,
+	description TEXT,
+	price INTEGER
 );
 
-CREATE TABLE orders (
+CREATE TABLE Orders (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
-	restaurant_id INTEGER REFERENCES restaurants,
-    ordered_food TEXT,
+    user_id INTEGER REFERENCES Users,
+	restaurant_id INTEGER REFERENCES Restaurants,
 	price INTEGER,
     logged_at TIMESTAMP
 );
+
+CREATE TABLE OrderItems (
+	id SERIAL PRIMARY KEY,
+	order_id INTEGER REFERENCES  Orders,
+	menuItem_id INTEGER REFERENCES MenuItems,
+	quantity INTEGER,
+	price INTEGER
+)
