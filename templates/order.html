@@ -3,7 +3,7 @@
 	Tee tilauksesi:
 	<p>
 		{% for option in form %}
-		<input type="radio" name="pizza" value={{loop.index0}}> {{ option }}
+		<input type="radio" name="pizza" value={{loop.index0}}> {{ option.name }} {{ option.description }} {{ option.price }} <br/>
 		{% endfor %}
 	<p>
 	Lisää kommentti:

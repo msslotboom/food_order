@@ -47,19 +47,16 @@ def create_user():
 
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_page(restaurant_id):
-    name_sql = ("SELECT name FROM restaurants WHERE id=:id")
-    order_sql = ("SELECT id FROM forms WHERE restaurant_id=:restaurant_id")
-    name = db.session.execute(text(name_sql), {"id":restaurant_id}).fetchone()[0]
-    order_id = db.session.execute(text(order_sql), {"restaurant_id":restaurant_id}).fetchone()[0]
-    print(name, order_id)
-    return render_template("restaurant.html", restaurant_name=name, order_id=order_id)
+    sql = ("SELECT id, name FROM restaurants WHERE id=:id")
+    restaurant = db.session.execute(text(sql), {"id":restaurant_id}).fetchone()
+    return render_template("restaurant.html", restaurant_name=restaurant.name, order_id=restaurant.id)
 
-@app.route("/order/<int:order_id>")
-def order(order_id):
-    sql = ("SELECT fields FROM forms WHERE id=:id")
-    form = db.session.execute(text(sql), {"id":order_id}).fetchone()[0].split(";")
-    print(form)
-    return render_template("order.html", form=form)
+@app.route("/order/<int:restaurant_id>")
+def show_order(restaurant_id):
+    sql = ("SELECT item_name, description, price FROM MenuItems WHERE restaurant_id=:restaurant_id")
+    menu_items = db.session.execute(text(sql), {"restaurant_id":restaurant_id}).fetchall()
+    print(menu_items)
+    return render_template("order.html", form=menu_items)
 
 @app.route("/order", methods=["POST"])
 def process_order():
