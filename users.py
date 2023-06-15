@@ -1,29 +1,33 @@
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask import Flask
-from flask import render_template, request, redirect, session
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from os import getenv
 from db import db
 
 def create_user(username, password):
-	sql = "SELECT * FROM users WHERE username=:username"
-	check = db.session.execute(text(sql), {"username":username}).fetchone()
-	if check is not None:
+	if user_exists(username):
 		return False
+	#TODO: Add password checks
 	hash_value = generate_password_hash(password)
-	sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+	sql = "INSERT INTO users (username, password, admin) VALUES (:username, :password, FALSE)"
 	db.session.execute(text(sql), {"username":username, "password":hash_value})
 	db.session.commit()
+	return True
 
 def check_credentials(username, password):
-	sql = "SELECT id, password FROM users WHERE username=:username"
+	sql = "SELECT password FROM users WHERE username=:username"
 	result = db.session.execute(text(sql), {"username": username})
 	user = result.fetchone()
-	if not user:
+	if user is None:
 		return False
 	hash_value = user.password
 	if check_password_hash(hash_value, password):
-		print("True")
 		return True
 	return False
+
+def user_exists(username):
+	sql = "SELECT * FROM users WHERE username=:username"
+	result = db.session.execute(text(sql), {"username": username})
+	user = result.fetchone()
+	print("User in user_exists function:", user)
+	if not user:
+		return False
+	return True
