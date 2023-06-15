@@ -9,6 +9,7 @@ CREATE TABLE Restaurants (
 	id SERIAL PRIMARY KEY,
 	name TEXT
 );
+
 CREATE TABLE MenuItems (
     id SERIAL PRIMARY KEY,
 	restaurant_id INTEGER REFERENCES Restaurants,
@@ -21,7 +22,7 @@ CREATE TABLE Orders (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES Users,
 	restaurant_id INTEGER REFERENCES Restaurants,
-	price INTEGER,
+	total_price INTEGER,
     logged_at TIMESTAMP
 );
 
