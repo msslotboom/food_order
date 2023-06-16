@@ -8,7 +8,8 @@ CREATE TABLE Users (
 
 CREATE TABLE Restaurants (
 	id SERIAL PRIMARY KEY,
-	name TEXT
+	name TEXT,
+	UNIQUE(name)
 );
 
 CREATE TABLE MenuItems (

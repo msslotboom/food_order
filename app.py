@@ -56,6 +56,19 @@ def show_order(restaurant_id):
     restaurant_data = restaurant.get_restaurant(restaurant_id)
     return render_template("order.html", menu_items=menu_items, restaurant=restaurant_data)
 
+@app.route("/create_restaurant")
+def show_create_restaurant_page():
+    return render_template("create_restaurant.html")
+
+@app.route("/create_restaurant", methods=["POST"])
+def create_restaurant():
+    print("test")
+    restaurant_name = request.form["restaurant_name"]
+    print(restaurant_name)
+    restaurant_id = restaurant.create_restaurant(restaurant_name)
+    print(restaurant_id)
+    return redirect("/restaurant/"+ str(restaurant_id))
+
 @app.route("/order/<int:restaurant_id>", methods=["POST"])
 def process_order(restaurant_id):
     menu_items = menu.get_menu_from_restaurant(restaurant_id)
