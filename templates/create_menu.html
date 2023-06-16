@@ -1,0 +1,13 @@
+<h3>Create the menu for {{ restaurant.name }}</h3>
+Current menu: <br/>
+	{% for option in menu_items %}
+	{{ option.item_name }} {{ option.description }} {{ option.price }}<br/>
+	{% endfor %}
+<h4>New item:</h4>
+{{restaurant.id}}
+<form action="/create_menu/add/{{restaurant.id}}" method="POST">
+    Item name: <input type = "text" name="item_name"><br/>
+	Item description: <input type = "text" name="description"><br/>
+	Price: <input type="number" name=price value=0><br/>
+    <input type="submit" value="submit">
+</form>

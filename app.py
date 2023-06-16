@@ -62,12 +62,23 @@ def show_create_restaurant_page():
 
 @app.route("/create_restaurant", methods=["POST"])
 def create_restaurant():
-    print("test")
     restaurant_name = request.form["restaurant_name"]
-    print(restaurant_name)
     restaurant_id = restaurant.create_restaurant(restaurant_name)
-    print(restaurant_id)
     return redirect("/restaurant/"+ str(restaurant_id))
+
+@app.route("/create_menu/<int:restaurant_id>")
+def show_create_menu_page(restaurant_id):
+    restaurant_data = restaurant.get_restaurant(restaurant_id)
+    menu_items = menu.get_menu_from_restaurant(restaurant_id)
+    return render_template("/create_menu.html", restaurant=restaurant_data, menu_items=menu_items)
+
+@app.route("/create_menu/add/<int:restaurant_id>", methods=["POST"])
+def add_menu_item(restaurant_id):
+    item_name = request.form["item_name"]
+    description = request.form["description"]
+    price = int(request.form["price"])
+    menu.add_item(restaurant_id, item_name, description, price)
+    return redirect("/create_menu/" + str(restaurant_id))
 
 @app.route("/order/<int:restaurant_id>", methods=["POST"])
 def process_order(restaurant_id):
@@ -83,5 +94,4 @@ def process_order(restaurant_id):
     user_id = users.get_id_from_username(session["username"])
     order_id = order.create_order(user_id, restaurant_id, tot_price)
     order.add_order_items(order_id, ordered_items)
-    
     return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
