@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
+from datetime import datetime
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
@@ -53,17 +54,40 @@ def restaurant_page(restaurant_id):
 
 @app.route("/order/<int:restaurant_id>")
 def show_order(restaurant_id):
-    sql = ("SELECT item_name, description, price FROM MenuItems WHERE restaurant_id=:restaurant_id")
-    menu_items = db.session.execute(text(sql), {"restaurant_id":restaurant_id}).fetchall()
-    print(menu_items)
-    return render_template("order.html", form=menu_items)
+    menu_query = ("SELECT id, item_name, description, price FROM MenuItems WHERE restaurant_id=:restaurant_id")
+    menu_items = db.session.execute(text(menu_query), {"restaurant_id":restaurant_id}).fetchall()
+    restaurant_query = ("SELECT * FROM Restaurants WHERE id=:restaurant_id")
+    restaurant = db.session.execute(text(restaurant_query), {"restaurant_id":restaurant_id}).fetchone()
+    return render_template("order.html", menu_items=menu_items, restaurant=restaurant)
 
-@app.route("/order", methods=["POST"])
-def process_order():
-    pizza = request.form["pizza"]
-    message = request.form["message"]
-    sql = "INSERT INTO orders (user_id, restaurant_id, ordered_food, price) VALUES (:user_id, :restaurant_id, :ordered_food, :price)"
-    db.session.execute(text(sql), {"user_id":1, "restaurant_id":3, "ordered_food":message, "price":15})
+@app.route("/order/<int:restaurant_id>", methods=["POST"])
+def process_order(restaurant_id):
+    menu_query = ("SELECT id, price FROM MenuItems WHERE restaurant_id=:restaurant_id")
+    menu_items = db.session.execute(text(menu_query), {"restaurant_id":restaurant_id}).fetchall()
+    ordered_items = []
+    tot_price = 0
+    for item in menu_items:
+        print(item.id)
+        amount = int(request.form[str(item.id)])
+        if amount != 0:
+            ordered_items.append((item, amount))
+        tot_price += item.price * (amount)
+
+    user_id = users.get_id_from_username(session["username"])
+
+    #Create Order in Orders table
+    create_order_query = ("INSERT INTO Orders (user_id, restaurant_id, total_price, logged_at) VALUES (:user_id, :restaurant_id, :total_price, :logged_at) RETURNING id")
+    order_id = db.session.execute(text(create_order_query), {"user_id": user_id, "restaurant_id": restaurant_id, "total_price": tot_price, "logged_at": datetime.now()}).fetchone()[0]
+    print(order_id)
     db.session.commit()
-    return render_template("result.html",   pizza=pizza,
-                                            message=message)
+
+    # Insert each item into OrderItems
+    order_item_add_query = ("INSERT INTO OrderItems (order_id, menuItem_id, quantity, price) VALUES (:order_id, :menuItem_id, :quantity, :price)")
+    for item in ordered_items:
+        print(item)
+        db.session.execute(text(order_item_add_query), {"order_id": order_id, "menuItem_id": item[0][0], "quantity":item[1], "price":item[0][1]})
+        db.session.commit()
+    
+    return render_template("result.html",   pizza="a",
+                                             message="A")
+    # INSERT ORDERITEMS

@@ -31,3 +31,10 @@ def user_exists(username):
 	if not user:
 		return False
 	return True
+
+def get_id_from_username(username):
+	sql = "SELECT id FROM users WHERE username=:username"
+	id = db.session.execute(text(sql), {"username": username}).fetchone()[0]
+	if id is not None:
+		return id
+	return False

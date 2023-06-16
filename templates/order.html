@@ -1,15 +1,12 @@
-<form action="/order" method="POST">
+<form action="/order/{{restaurant.id}}" method="POST">
+	<h1>{{ restaurant.name }} {{ restaurant.id }} </h1>
 	<br>
 	Tee tilauksesi:
 	<p>
-		{% for option in form %}
-		<input type="radio" name="pizza" value={{loop.index0}}> {{ option.name }} {{ option.description }} {{ option.price }} <br/>
+		{% for option in menu_items %}
+		{{ option.item_name }} {{ option.description }} {{ option.price }}<input type="number" name={{option.id}} value=0><br/>
 		{% endfor %}
 	<p>
-	Lisää kommentti:
-	<input type="text", name="message">
-
 	<br>
 	<input type="submit" value="send">
 </form>
-	
