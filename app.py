@@ -71,5 +71,4 @@ def process_order(restaurant_id):
     order_id = order.create_order(user_id, restaurant_id, tot_price)
     order.add_order_items(order_id, ordered_items)
     
-    return render_template("result.html",   pizza="a",
-                                             message="A")
+    return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
