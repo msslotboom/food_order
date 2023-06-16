@@ -3,8 +3,6 @@ from sqlalchemy.sql import text
 from db import db
 
 def create_user(username, password):
-	if user_exists(username):
-		return False
 	#TODO: Add password checks
 	hash_value = generate_password_hash(password)
 	sql = "INSERT INTO users (username, password, admin) VALUES (:username, :password, FALSE)"
@@ -23,14 +21,6 @@ def check_credentials(username, password):
 		return True
 	return False
 
-def user_exists(username):
-	sql = "SELECT * FROM users WHERE username=:username"
-	result = db.session.execute(text(sql), {"username": username})
-	user = result.fetchone()
-	print("User in user_exists function:", user)
-	if not user:
-		return False
-	return True
 
 def get_id_from_username(username):
 	sql = "SELECT id FROM users WHERE username=:username"

@@ -2,7 +2,8 @@ CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
     username TEXT,
     password TEXT,
-	admin BOOLEAN
+	admin BOOLEAN,
+	UNIQUE(username)
 );
 
 CREATE TABLE Restaurants (
