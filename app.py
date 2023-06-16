@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.secret_key = getenv("SECRET_KEY")
 from db import db
-import users
+import users, menu
 
 @app.route("/")
 def index():
@@ -54,16 +54,14 @@ def restaurant_page(restaurant_id):
 
 @app.route("/order/<int:restaurant_id>")
 def show_order(restaurant_id):
-    menu_query = ("SELECT id, item_name, description, price FROM MenuItems WHERE restaurant_id=:restaurant_id")
-    menu_items = db.session.execute(text(menu_query), {"restaurant_id":restaurant_id}).fetchall()
+    menu_items = menu.get_menu_from_restaurant(restaurant_id)
     restaurant_query = ("SELECT * FROM Restaurants WHERE id=:restaurant_id")
     restaurant = db.session.execute(text(restaurant_query), {"restaurant_id":restaurant_id}).fetchone()
     return render_template("order.html", menu_items=menu_items, restaurant=restaurant)
 
 @app.route("/order/<int:restaurant_id>", methods=["POST"])
 def process_order(restaurant_id):
-    menu_query = ("SELECT id, price FROM MenuItems WHERE restaurant_id=:restaurant_id")
-    menu_items = db.session.execute(text(menu_query), {"restaurant_id":restaurant_id}).fetchall()
+    menu_items = menu.get_menu_from_restaurant(restaurant_id)
     ordered_items = []
     tot_price = 0
     for item in menu_items:
@@ -90,4 +88,3 @@ def process_order(restaurant_id):
     
     return render_template("result.html",   pizza="a",
                                              message="A")
-    # INSERT ORDERITEMS
