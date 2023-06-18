@@ -80,6 +80,16 @@ def add_menu_item(restaurant_id):
     menu.add_item(restaurant_id, item_name, description, price)
     return redirect("/create_menu/" + str(restaurant_id))
 
+@app.route("/create_menu/modify/<int:item_id>", methods=["POST"])
+def modify_menu_item(item_id):
+    item_name = request.form["item_name"]
+    description = request.form["description"]
+    price = int(request.form["price"])
+    menu.modify_item(item_id, item_name, description, price)
+    restaurant_id = menu.get_restaurant_id(item_id)
+    return redirect("/create_menu/" + str(restaurant_id))
+
+
 @app.route("/order/<int:restaurant_id>", methods=["POST"])
 def process_order(restaurant_id):
     menu_items = menu.get_menu_from_restaurant(restaurant_id)
