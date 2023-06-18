@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Make your order{% endblock %}
+{% block content %}
 <form action="/order/{{restaurant.id}}" method="POST">
 	<h1>{{ restaurant.name }} {{ restaurant.id }} </h1>
 	<br>
@@ -10,3 +13,4 @@
 	<br>
 	<input type="submit" value="send">
 </form>
+{% endblock %}

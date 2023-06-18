@@ -1,4 +1,7 @@
-<title>Ravintola {{ restaurant_name }}</title>
-<h1>Ravintola {{ restaurant_name }}</h1>
-<b>Tervetuloa</b>!
-<a href="/order/{{ order_id }}">Tilaa</a>
+{% extends "layout.html" %}
+{% block title %}Restaurant {{ restaurant_name }}{% endblock %}
+{% block content %}
+<h1>Restaurant {{ restaurant_name }}</h1>
+<b>Welcome!</b>!
+<a href="/order/{{ order_id }}">Order</a>
+{% endblock %}

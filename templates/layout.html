@@ -1,0 +1,21 @@
+<!doctype html>
+<title>Food order site - {% block title %}{% endblock %}</title>
+<h1>Food order site</h1>
+<a href="/">Etusivu</a>
+<hr>
+{% block content %}{% endblock %}
+<hr>
+{% if session.username %}
+<p>You are logged in as {{ session.username }}</p>
+<a href="/logout">Log out</a>
+{% else %}
+<form action="/login" method="POST">
+<p>Username:<br>
+<input type="text" name="username"></p>
+<p>Password:<br>
+<input type="password" name="password"></p>
+<input type="submit" value="Log in">
+<br/>
+<a href ="/create_user">Create user</a>
+</form>
+{% endif %}

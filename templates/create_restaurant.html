@@ -1,6 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}Create a restaurant{% endblock %}
+{% block content %}
 <h3>Create a restaurant</h3>
 <form action="/create_restaurant" method="POST">
     Restaurant name: <input type = "text" name="restaurant_name">
     <br>
     <input type="submit" value="submit">
 </form>
+{% endblock %}

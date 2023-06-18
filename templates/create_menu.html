@@ -1,3 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Create a menu{% endblock %}
+{% block content %}
 <h3>Create the menu for {{ restaurant.name }}</h3>
 Current menu: <br/>
 	{% for item in menu_items %}
@@ -21,3 +24,4 @@ Current menu: <br/>
 	Price: <input type="number" name=price value=0><br/>
     <input type="submit" value="submit">
 </form>
+{% endblock %}
