@@ -19,5 +19,9 @@ def modify_item(item_id, item_name, description, price):
 def get_restaurant_id(item_id):
     sql = ("SELECT restaurant_id FROM MenuItems WHERE id=:item_id")
     restaurant_id = db.session.execute(text(sql), {"item_id":item_id}).fetchone()[0]
-    print(restaurant_id)
     return restaurant_id
+
+def remove_item(item_id):
+    sql = ("DELETE FROM MenuItems WHERE id=:item_id")
+    db.session.execute(text(sql), {"item_id":item_id})
+    db.session.commit()

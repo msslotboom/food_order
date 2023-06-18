@@ -89,6 +89,11 @@ def modify_menu_item(item_id):
     restaurant_id = menu.get_restaurant_id(item_id)
     return redirect("/create_menu/" + str(restaurant_id))
 
+@app.route("/create_menu/delete/<int:item_id>", methods=["POST"])
+def remove_menu_item(item_id):
+    restaurant_id = menu.get_restaurant_id(item_id)
+    menu.remove_item(item_id)
+    return redirect("/create_menu/" + str(restaurant_id))
 
 @app.route("/order/<int:restaurant_id>", methods=["POST"])
 def process_order(restaurant_id):
