@@ -7,7 +7,7 @@ Current menu: <br/>
 	<form action="/create_menu/modify/{{item.id}}" method="POST">
 		<input type = "text" name="item_name" value="{{ item.item_name }}">
 		<input type = "text" name="description" value="{{ item.description }}">
-		<input type = "number" name="price" value=0>
+		<input type = "number" name="price" value="{{ item.price }}">
 	<input type="submit" value="modify">
 	</form>
 
