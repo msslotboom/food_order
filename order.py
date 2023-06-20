@@ -15,3 +15,13 @@ def add_order_items(order_id, ordered_items):
         print(item)
         db.session.execute(text(order_item_add_query), {"order_id": order_id, "menuItem_id": item[0].id, "quantity":item[1], "price":item[0].price})
         db.session.commit()
+
+def get_orders(user_id):
+    sql = ("""SELECT o.id, o.logged_at, r.name
+    FROM orders o
+    JOIN restaurants r ON o.restaurant_id = r.id
+    WHERE o.user_id = :user_id;""")
+    orders = db.session.execute(text(sql), {"user_id":user_id}).fetchall()
+    for order in orders:
+        print(order)
+    return orders

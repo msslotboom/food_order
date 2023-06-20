@@ -110,3 +110,9 @@ def process_order(restaurant_id):
     order_id = order.create_order(user_id, restaurant_id, tot_price)
     order.add_order_items(order_id, ordered_items)
     return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
+
+@app.route("/order_history/<int:user_id>")
+def show_users_orders(user_id):
+    #TODO: only access if user_id is logged in user
+    orders = order.get_orders(user_id)
+    return render_template("user_orders.html", orders=orders)
