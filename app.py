@@ -68,12 +68,14 @@ def create_restaurant():
 
 @app.route("/create_menu/<int:restaurant_id>")
 def show_create_menu_page(restaurant_id):
+    #TODO: validate if menu is allowed to be modified
     restaurant_data = restaurant.get_restaurant(restaurant_id)
     menu_items = menu.get_menu_from_restaurant(restaurant_id)
     return render_template("/create_menu.html", restaurant=restaurant_data, menu_items=menu_items)
 
 @app.route("/create_menu/add/<int:restaurant_id>", methods=["POST"])
 def add_menu_item(restaurant_id):
+    #TODO: validate if menu is allowed to be modified
     item_name = request.form["item_name"]
     description = request.form["description"]
     price = int(request.form["price"])
@@ -82,6 +84,7 @@ def add_menu_item(restaurant_id):
 
 @app.route("/create_menu/modify/<int:item_id>", methods=["POST"])
 def modify_menu_item(item_id):
+    #TODO: validate if menu is allowed to be modified
     item_name = request.form["item_name"]
     description = request.form["description"]
     price = int(request.form["price"])
@@ -91,6 +94,7 @@ def modify_menu_item(item_id):
 
 @app.route("/create_menu/delete/<int:item_id>", methods=["POST"])
 def remove_menu_item(item_id):
+    #TODO: validate if menu is allowed to be modified
     restaurant_id = menu.get_restaurant_id(item_id)
     menu.remove_item(item_id)
     return redirect("/create_menu/" + str(restaurant_id))
@@ -111,8 +115,13 @@ def process_order(restaurant_id):
     order.add_order_items(order_id, ordered_items)
     return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
 
+@app.route("/order_history/myorders")
+def redirect_to_own_orders():
+    user_id = users.get_id_from_username(session["username"])
+    return redirect("/order_history/" + str(user_id))
+
 @app.route("/order_history/<int:user_id>")
-def show_users_orders(user_id):
+def show_orders(user_id):
     #TODO: only access if user_id is logged in user
     orders = order.get_orders(user_id)
-    return render_template("user_orders.html", orders=orders)
+    return render_template("order_history.html", orders=orders)
