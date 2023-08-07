@@ -37,7 +37,9 @@ def create_user():
     username = request.form["username"]
     password = request.form["password"]
     password_repeat = request.form["password_repeat"]
-    if password == password_repeat and users.create_user(username, password):
+    restaurant = request.form["restaurant"]
+    print(restaurant)
+    if password == password_repeat and users.create_user(username, password, restaurant):
         session["username"] = username
         print("Succes")
         return redirect("/")

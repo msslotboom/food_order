@@ -3,12 +3,14 @@ CREATE TABLE Users (
     username TEXT,
     password TEXT,
 	admin BOOLEAN,
+	restaurant BOOLEAN,
 	UNIQUE(username)
 );
 
 CREATE TABLE Restaurants (
 	id SERIAL PRIMARY KEY,
 	name TEXT,
+	restaurant_owner INTEGER REFERENCES Users,
 	UNIQUE(name)
 );
 

@@ -2,11 +2,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from db import db
 
-def create_user(username, password):
+def create_user(username, password, restaurant):
 	#TODO: Add password checks
 	hash_value = generate_password_hash(password)
-	sql = "INSERT INTO users (username, password, admin) VALUES (:username, :password, FALSE)"
-	db.session.execute(text(sql), {"username":username, "password":hash_value})
+	sql = "INSERT INTO users (username, password, admin, restaurant) VALUES (:username, :password, FALSE, :restaurant)"
+	db.session.execute(text(sql), {"username":username, "password":hash_value, "restaurant":restaurant})
 	db.session.commit()
 	return True
 
