@@ -28,3 +28,8 @@ def get_id_from_username(username):
 	if id is not None:
 		return id
 	return False
+
+def is_user_restaurant(username):
+	sql = "SELECT restaurant FROM users WHERE username=:username"
+	restaurant = db.session.execute(text(sql), {"username": username}).fetchone()[0]
+	return restaurant

@@ -42,6 +42,8 @@ def create_user():
     if password == password_repeat and users.create_user(username, password, restaurant):
         session["username"] = username
         print("Succes")
+        if users.is_user_restaurant(username):
+            return redirect("/create_restaurant")
         return redirect("/")
     else:
         print("fail")
@@ -66,7 +68,7 @@ def show_create_restaurant_page():
 def create_restaurant():
     restaurant_name = request.form["restaurant_name"]
     restaurant_id = restaurant.create_restaurant(restaurant_name)
-    return redirect("/restaurant/"+ str(restaurant_id))
+    return redirect("/create_menu/"+ str(restaurant_id))
 
 @app.route("/create_menu/<int:restaurant_id>")
 def show_create_menu_page(restaurant_id):
