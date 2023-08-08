@@ -12,8 +12,9 @@ import users, menu, restaurant, order
 
 @app.route("/")
 def index():
+    print(session["restaurant"])
     restaurants = db.session.execute(text("SELECT * FROM restaurants")).fetchall()
-    owned_restaurant = None
+    owned_restaurants = None
     if "username" in session:
         user_is_restaurant = users.is_user_restaurant(session["username"])
         if user_is_restaurant:
@@ -30,6 +31,10 @@ def login():
     password = request.form["password"]
     if users.check_credentials(username, password):
         session["username"] = username
+        if users.is_user_restaurant(username):
+            session["restaurant"] = True
+        else:
+            session["restaurant"] = False
     return redirect("/")
 
 @app.route("/logout")

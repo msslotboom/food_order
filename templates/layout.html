@@ -1,7 +1,12 @@
 <!doctype html>
 <title>Food order site - {% block title %}{% endblock %}</title>
 <h1>Food order site</h1>
-<a href="/">Main Page</a> {% if session.username %}<a href="/order_history/myorders">My orders</a> {% endif %}
+<a href="/">Main Page</a> 
+{% if session.username and not session.restaurant %}
+	<a href="/order_history/myorders">My orders</a> 
+{% elif session.username and session.restaurant %}
+	<a href="/">This is a link only visible for restaurants that currently leads nowhere</a>
+{% endif %}
 <hr>
 {% block content %}{% endblock %}
 <hr>
