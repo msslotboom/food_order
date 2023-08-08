@@ -1,11 +1,21 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
-<h2>Choose a restaurant to order from!</h2>
 <b>Welcome!</b>
+{% if user_is_restaurant %}
+	<h2>Manage your restaurant!</h2>
+	{% if owned_restaurant != None %}
+	<a href="/create_menu/{{owned_restaurant.id}}">Update your menu</a>
+	{% else %}
+	<a href="/create_restaurant">Create your restaurant!</a>
+	{% endif %}
+{% else %}
 <ul>
+<h2>Choose a restaurant to order from!</h2>
 {% for restaurant in restaurants %}
 <li> <a href="/restaurant/{{restaurant.id}}">{{ restaurant.name  }}</a>
 {% endfor %}
 </ul>
+{% endif %}
+
 {% endblock %}

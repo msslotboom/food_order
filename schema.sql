@@ -10,7 +10,7 @@ CREATE TABLE Users (
 CREATE TABLE Restaurants (
 	id SERIAL PRIMARY KEY,
 	name TEXT,
-	restaurant_owner INTEGER REFERENCES Users,
+	owner_id INTEGER REFERENCES Users,
 	UNIQUE(name)
 );
 

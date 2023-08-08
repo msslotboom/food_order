@@ -13,7 +13,16 @@ import users, menu, restaurant, order
 @app.route("/")
 def index():
     restaurants = db.session.execute(text("SELECT * FROM restaurants")).fetchall()
-    return render_template("index.html", restaurants=restaurants)
+    owned_restaurant = None
+    if "username" in session:
+        user_is_restaurant = users.is_user_restaurant(session["username"])
+        if user_is_restaurant:
+            owner_id = users.get_id_from_username(session["username"])
+            owned_restaurant = restaurant.get_restaurant_from_owner_id(owner_id)
+            print(owned_restaurant)
+    else:
+        user_is_restaurant = False
+    return render_template("index.html", restaurants=restaurants, user_is_restaurant=user_is_restaurant, owned_restaurant=owned_restaurant)
 
 @app.route("/login",methods=["POST"])
 def login():
@@ -67,7 +76,8 @@ def show_create_restaurant_page():
 @app.route("/create_restaurant", methods=["POST"])
 def create_restaurant():
     restaurant_name = request.form["restaurant_name"]
-    restaurant_id = restaurant.create_restaurant(restaurant_name)
+    owner_id = users.get_id_from_username(session["username"])
+    restaurant_id = restaurant.create_restaurant(restaurant_name, owner_id)
     return redirect("/create_menu/"+ str(restaurant_id))
 
 @app.route("/create_menu/<int:restaurant_id>")
