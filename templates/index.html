@@ -3,12 +3,12 @@
 {% block content %}
 <b>Welcome!</b>
 {% if user_is_restaurant %}
-	<h2>Manage your restaurant!</h2>
-	{% if owned_restaurant != None %}
-	<a href="/create_menu/{{owned_restaurant.id}}">Update your menu</a>
-	{% else %}
+	<h2>Manage your restaurants!</h2>
+	{% for restaurant in owned_restaurants %}
+		<a href="/create_menu/{{restaurant.id}}">Update your menu for {{ restaurant.name }}</a>
+		<br>
+		{% endfor %}
 	<a href="/create_restaurant">Create your restaurant!</a>
-	{% endif %}
 {% else %}
 <ul>
 <h2>Choose a restaurant to order from!</h2>

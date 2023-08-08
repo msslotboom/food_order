@@ -18,11 +18,11 @@ def index():
         user_is_restaurant = users.is_user_restaurant(session["username"])
         if user_is_restaurant:
             owner_id = users.get_id_from_username(session["username"])
-            owned_restaurant = restaurant.get_restaurant_from_owner_id(owner_id)
-            print(owned_restaurant)
+            owned_restaurants = restaurant.get_restaurants_from_owner_id(owner_id)
+            print(owned_restaurants)
     else:
         user_is_restaurant = False
-    return render_template("index.html", restaurants=restaurants, user_is_restaurant=user_is_restaurant, owned_restaurant=owned_restaurant)
+    return render_template("index.html", restaurants=restaurants, user_is_restaurant=user_is_restaurant, owned_restaurants=owned_restaurants)
 
 @app.route("/login",methods=["POST"])
 def login():

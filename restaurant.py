@@ -11,7 +11,7 @@ def create_restaurant(restaurant_name, owner_id):
     db.session.commit()
     return restaurant_id
 
-def get_restaurant_from_owner_id(user_id):
+def get_restaurants_from_owner_id(user_id):
     sql = ("SELECT * FROM restaurants WHERE owner_id=:owner_id")
-    restaurant_id = db.session.execute(text(sql), {"owner_id":user_id}).fetchone()
+    restaurant_id = db.session.execute(text(sql), {"owner_id":user_id}).fetchall()
     return restaurant_id
