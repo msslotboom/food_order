@@ -14,6 +14,10 @@
 		{% endfor %}
 	<p>
 	<br>
+	{% if session.username %}
 	<input type="submit" value="send">
+	{% else %}
+	You need to be logged in to order!
+	{% endif %}
 </form>
 {% endblock %}
