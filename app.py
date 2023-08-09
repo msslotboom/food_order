@@ -78,14 +78,18 @@ def show_order(restaurant_id):
 
 @app.route("/create_restaurant")
 def show_create_restaurant_page():
-    return render_template("create_restaurant.html")
+    if users.is_user_restaurant(session["username"]):
+        return render_template("create_restaurant.html")
+    return render_template("error.html", error="Your account is not set up as a restaurant! Create a new account of type restaurant to create a restaurant")
 
 @app.route("/create_restaurant", methods=["POST"])
 def create_restaurant():
-    restaurant_name = request.form["restaurant_name"]
-    owner_id = users.get_id_from_username(session["username"])
-    restaurant_id = restaurant.create_restaurant(restaurant_name, owner_id)
-    return redirect("/create_menu/"+ str(restaurant_id))
+    if users.is_user_restaurant(session["username"]):
+        restaurant_name = request.form["restaurant_name"]
+        owner_id = users.get_id_from_username(session["username"])
+        restaurant_id = restaurant.create_restaurant(restaurant_name, owner_id)
+        return redirect("/create_menu/"+ str(restaurant_id))
+    return render_template("error.html", error="Your account is not set up as a restaurant! Create a new account of type restaurant to create a restaurant")
 
 @app.route("/create_menu/<int:restaurant_id>")
 def show_create_menu_page(restaurant_id):
