@@ -168,5 +168,6 @@ def order_info(order_id):
     if order.order_owned_by_user(user_id, order_id) or users.is_admin(session["username"]):
         ordered_items = order.get_order_items(order_id)
         print("ordered_items:",ordered_items)
-    total_price = order.total_price_of_order(order_id)
-    return render_template("order_info.html", ordered_items=ordered_items, total_price=total_price)
+        total_price = order.total_price_of_order(order_id)
+        return render_template("order_info.html", ordered_items=ordered_items, total_price=total_price)
+    return render_template("error.html", error="You do not have permissions to see this page!")
