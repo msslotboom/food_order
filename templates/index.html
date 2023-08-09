@@ -5,11 +5,13 @@
 {% if user_is_restaurant %}
 	<h2>Manage your restaurants!</h2>
 	{% for restaurant in owned_restaurants %}
-		<a href="/create_menu/{{restaurant.id}}">Update your menu for {{ restaurant.name }}</a>
+		<h3>{{ restaurant.name }}</h3>
+		<a href="/create_menu/{{restaurant.id}}">Update your menu for {{ restaurant.name }}</a><br>
+		<a href="/manage_orders/{{restaurant.id}}">Manage orders for {{restaurant.name }}</a><br>
 		<br>
 		{% endfor %}
 		<br><br>
-	<a href="/create_restaurant">Create your restaurant!</a>
+	<a href="/create_restaurant">Create a new restaurant</a>
 {% else %}
 <ul>
 <h2>Choose a restaurant to order from!</h2>

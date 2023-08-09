@@ -147,7 +147,6 @@ def process_order(restaurant_id):
     order_id = order.create_order(user_id, restaurant_id, tot_price)
     order.add_order_items(order_id, ordered_items)
     return redirect("/order_info/" + str(order_id))
-    # return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
 
 @app.route("/order_history/myorders")
 def redirect_to_own_orders():
