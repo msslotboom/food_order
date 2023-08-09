@@ -57,7 +57,9 @@ def create_user():
         session["username"] = username
         print("Succes")
         if users.is_user_restaurant(username):
+            session["restaurant"] = True
             return redirect("/create_restaurant")
+        session["restaurant"] = False
         return redirect("/")
     else:
         print("fail")
