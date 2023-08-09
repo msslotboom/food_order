@@ -1,6 +1,7 @@
 from sqlalchemy.sql import text
 from db import db
 from datetime import datetime
+import menu
 
 def create_order(user_id, restaurant_id, total_price):
     create_order_query = ("INSERT INTO Orders (user_id, restaurant_id, total_price, logged_at) VALUES (:user_id, :restaurant_id, :total_price, :logged_at) RETURNING id")
@@ -10,10 +11,10 @@ def create_order(user_id, restaurant_id, total_price):
 
 #ordered_items is a list of tuples, where the first value is an ordered item and the second value is the amount
 def add_order_items(order_id, ordered_items):
-    order_item_add_query = ("INSERT INTO OrderItems (order_id, menuItem_id, quantity, price) VALUES (:order_id, :menuItem_id, :quantity, :price)")
+    order_item_add_query = ("INSERT INTO OrderItems (order_id, menuItem_id, item_name, quantity, price) VALUES (:order_id, :menuItem_id, :item_name, :quantity, :price)")
     for item in ordered_items:
         print(item)
-        db.session.execute(text(order_item_add_query), {"order_id": order_id, "menuItem_id": item[0].id, "quantity":item[1], "price":item[0].price})
+        db.session.execute(text(order_item_add_query), {"order_id": order_id, "menuItem_id": item[0].id, "item_name":item[0].item_name, "quantity":item[1], "price":item[0].price})
         db.session.commit()
 
 def get_orders(user_id):
@@ -25,3 +26,19 @@ def get_orders(user_id):
     for order in orders:
         print(order)
     return orders
+
+def get_order_items(order_id):
+    sql = "SELECT * FROM OrderItems WHERE order_id=:order_id"
+    ordered_items = db.session.execute(text(sql), {"order_id":order_id}).fetchall()
+    return ordered_items
+
+def total_price_of_order(order_id):
+    sql = "SELECT total_price FROM Orders WHERE id=:order_id"
+    price = db.session.execute(text(sql), {"order_id":order_id}).fetchone()[0]
+    return price
+
+def order_owned_by_user(user_id, order_id):
+    sql = ("SELECT user_id FROM orders WHERE id=:order_id")
+    id = db.session.execute(text(sql), {"order_id":order_id}).fetchone()[0]
+    print(id ==user_id)
+    return id == user_id

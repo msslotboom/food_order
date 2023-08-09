@@ -3,7 +3,7 @@
 {% block content %}
 Your Order: <br/>
 {% for item in ordered_items %}
-Name: {{ item[0].item_name }} 	Amount: {{ item[1] }} Price:{{ item[0].price * item[1]}}
+Name: {{ item.item_name }} 	Amount: {{ item.amount }} Price:{{ item.price * item.quantity}}
 <br/>
 {% endfor %}
 Total Price: {{ total_price }}

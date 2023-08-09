@@ -34,6 +34,7 @@ CREATE TABLE OrderItems (
 	id SERIAL PRIMARY KEY,
 	order_id INTEGER REFERENCES  Orders,
 	menuItem_id INTEGER REFERENCES MenuItems,
+	item_name TEXT,
 	quantity INTEGER,
 	price INTEGER
 )

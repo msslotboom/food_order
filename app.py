@@ -146,7 +146,8 @@ def process_order(restaurant_id):
     user_id = users.get_id_from_username(session["username"])
     order_id = order.create_order(user_id, restaurant_id, tot_price)
     order.add_order_items(order_id, ordered_items)
-    return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
+    return redirect("/order_info/" + str(order_id))
+    # return render_template("order_info.html",   ordered_items=ordered_items, total_price=tot_price)
 
 @app.route("/order_history/myorders")
 def redirect_to_own_orders():
@@ -160,3 +161,12 @@ def show_orders(user_id):
         orders = order.get_orders(user_id)
         return render_template("order_history.html", orders=orders)
     return render_template("error.html", error="You do not have permissions to see this page!")
+
+@app.route("/order_info/<int:order_id>")
+def order_info(order_id):
+    user_id = users.get_id_from_username(session["username"])
+    if order.order_owned_by_user(user_id, order_id) or users.is_admin(session["username"]):
+        ordered_items = order.get_order_items(order_id)
+        print("ordered_items:",ordered_items)
+    total_price = order.total_price_of_order(order_id)
+    return render_template("order_info.html", ordered_items=ordered_items, total_price=total_price)
