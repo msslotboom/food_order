@@ -110,7 +110,7 @@ def add_menu_item(restaurant_id):
 @app.route("/create_menu/modify/<int:item_id>", methods=["POST"])
 def modify_menu_item(item_id):
     user_id = users.get_id_from_username(session["username"])
-    if restaurant.user_is_restaurant_owner(user_id, restaurant_id):
+    if restaurant.user_is_restaurant_owner(user_id, restaurant_id) or users.is_admin(user_id):
         item_name = request.form["item_name"]
         description = request.form["description"]
         price = int(request.form["price"])
@@ -151,6 +151,8 @@ def redirect_to_own_orders():
 
 @app.route("/order_history/<int:user_id>")
 def show_orders(user_id):
-    #TODO: only access if user_id is logged in user
-    orders = order.get_orders(user_id)
-    return render_template("order_history.html", orders=orders)
+    id = users.get_id_from_username(session["username"])
+    if id == user_id or users.is_admin(session["username"]):
+        orders = order.get_orders(user_id)
+        return render_template("order_history.html", orders=orders)
+    return render_template("error.html", error="You do not have permissions to see this page!")

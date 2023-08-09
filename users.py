@@ -33,3 +33,8 @@ def is_user_restaurant(username):
 	sql = "SELECT restaurant FROM users WHERE username=:username"
 	restaurant = db.session.execute(text(sql), {"username": username}).fetchone()[0]
 	return restaurant
+
+def is_admin(username):
+	sql = "SELECT admin FROM users WHERE username=:username"
+	admin = db.session.execute(text(sql), {"username":username}).fetchone()[0]
+	return admin
