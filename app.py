@@ -89,36 +89,44 @@ def create_restaurant():
 
 @app.route("/create_menu/<int:restaurant_id>")
 def show_create_menu_page(restaurant_id):
-    #TODO: validate if menu is allowed to be modified
-    restaurant_data = restaurant.get_restaurant(restaurant_id)
-    menu_items = menu.get_menu_from_restaurant(restaurant_id)
-    return render_template("/create_menu.html", restaurant=restaurant_data, menu_items=menu_items)
+    user_id = users.get_id_from_username(session["username"])
+    if restaurant.user_is_restaurant_owner(user_id, restaurant_id):
+        restaurant_data = restaurant.get_restaurant(restaurant_id)
+        menu_items = menu.get_menu_from_restaurant(restaurant_id)
+        return render_template("/create_menu.html", restaurant=restaurant_data, menu_items=menu_items)
+    return render_template("error.html", error="You do not have permissions to modify this menu!")
 
 @app.route("/create_menu/add/<int:restaurant_id>", methods=["POST"])
 def add_menu_item(restaurant_id):
-    #TODO: validate if menu is allowed to be modified
-    item_name = request.form["item_name"]
-    description = request.form["description"]
-    price = int(request.form["price"])
-    menu.add_item(restaurant_id, item_name, description, price)
-    return redirect("/create_menu/" + str(restaurant_id))
+    user_id = users.get_id_from_username(session["username"])
+    if restaurant.user_is_restaurant_owner(user_id, restaurant_id):
+        item_name = request.form["item_name"]
+        description = request.form["description"]
+        price = int(request.form["price"])
+        menu.add_item(restaurant_id, item_name, description, price)
+        return redirect("/create_menu/" + str(restaurant_id))
+    return render_template("error.html", error="You do not have permissions to modify this menu!")
 
 @app.route("/create_menu/modify/<int:item_id>", methods=["POST"])
 def modify_menu_item(item_id):
-    #TODO: validate if menu is allowed to be modified
-    item_name = request.form["item_name"]
-    description = request.form["description"]
-    price = int(request.form["price"])
-    menu.modify_item(item_id, item_name, description, price)
-    restaurant_id = menu.get_restaurant_id(item_id)
-    return redirect("/create_menu/" + str(restaurant_id))
+    user_id = users.get_id_from_username(session["username"])
+    if restaurant.user_is_restaurant_owner(user_id, restaurant_id):
+        item_name = request.form["item_name"]
+        description = request.form["description"]
+        price = int(request.form["price"])
+        menu.modify_item(item_id, item_name, description, price)
+        restaurant_id = menu.get_restaurant_id(item_id)
+        return redirect("/create_menu/" + str(restaurant_id))
+    return render_template("error.html", error="You do not have permissions to modify this menu!")
 
 @app.route("/create_menu/delete/<int:item_id>", methods=["POST"])
 def remove_menu_item(item_id):
-    #TODO: validate if menu is allowed to be modified
-    restaurant_id = menu.get_restaurant_id(item_id)
-    menu.remove_item(item_id)
-    return redirect("/create_menu/" + str(restaurant_id))
+    user_id = users.get_id_from_username(session["username"])
+    if restaurant.user_is_restaurant_owner(user_id, restaurant_id):
+        restaurant_id = menu.get_restaurant_id(item_id)
+        menu.remove_item(item_id)
+        return redirect("/create_menu/" + str(restaurant_id))
+    return render_template("error.html", error="You do not have permissions to modify this menu!")
 
 @app.route("/order/<int:restaurant_id>", methods=["POST"])
 def process_order(restaurant_id):
