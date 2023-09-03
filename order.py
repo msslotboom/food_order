@@ -4,8 +4,8 @@ from datetime import datetime
 import menu
 
 def create_order(user_id, restaurant_id, total_price):
-    create_order_query = ("INSERT INTO Orders (user_id, restaurant_id, total_price, logged_at) VALUES (:user_id, :restaurant_id, :total_price, :logged_at) RETURNING id")
-    order_id = db.session.execute(text(create_order_query), {"user_id": user_id, "restaurant_id": restaurant_id, "total_price": total_price, "logged_at": datetime.now()}).fetchone()[0]
+    create_order_query = ("INSERT INTO Orders (user_id, restaurant_id, total_price, logged_at, delivered) VALUES (:user_id, :restaurant_id, :total_price, :logged_at, :delivered) RETURNING id")
+    order_id = db.session.execute(text(create_order_query), {"user_id": user_id, "restaurant_id": restaurant_id, "total_price": total_price, "logged_at": datetime.now(), "delivered":False}).fetchone()[0]
     db.session.commit()
     return order_id
 
@@ -52,5 +52,9 @@ def total_price_of_order(order_id):
 def order_owned_by_user(user_id, order_id):
     sql = ("SELECT user_id FROM orders WHERE id=:order_id")
     id = db.session.execute(text(sql), {"order_id":order_id}).fetchone()[0]
-    print(id ==user_id)
     return id == user_id
+
+def get_delivery_status(order_id):
+    sql = "SELECT delivered from orders WHERE id=:order_id"
+    delivery_status = db.session.execute(text(sql), {"order_id":order_id}).fetchone()[0]
+    return delivery_status
