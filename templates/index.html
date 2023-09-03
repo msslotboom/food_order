@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
-<b>Welcome!</b>
 {% if user_is_restaurant %}
 	<h2>Manage your restaurants!</h2>
 	{% for restaurant in owned_restaurants %}

@@ -1,0 +1,14 @@
+body {
+    margin: auto;
+    max-width: 45em;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    background-color: #a9c4ff;
+}
+h1 {
+	color:rgb(81, 75, 75);
+    text-align:center
+}
+
+h2 {
+    text-align: center;
+}
