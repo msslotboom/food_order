@@ -52,10 +52,10 @@ def create_user():
     password = request.form["password"]
     password_repeat = request.form["password_repeat"]
     restaurant = request.form["restaurant"]
-    print(restaurant)
+    if users.user_exists(username):
+        return render_template("error.html", error="username is already in use! Try another username")
     if password == password_repeat and users.create_user(username, password, restaurant):
         session["username"] = username
-        print("Succes")
         if users.is_user_restaurant(username):
             session["restaurant"] = True
             return redirect("/create_restaurant")

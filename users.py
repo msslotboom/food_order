@@ -21,6 +21,13 @@ def check_credentials(username, password):
 		return True
 	return False
 
+def user_exists(username):
+	sql = "SELECT * FROM users WHERE users WHERE username=:username"
+	result = db.session.execute(text(sql), {"username": username})
+	username = result.fetchone()
+	if username is not None:
+		return True
+	return False
 
 def get_id_from_username(username):
 	sql = "SELECT id FROM users WHERE username=:username"
