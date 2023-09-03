@@ -17,7 +17,7 @@ def add_order_items(order_id, ordered_items):
         db.session.execute(text(order_item_add_query), {"order_id": order_id, "menuItem_id": item[0].id, "item_name":item[0].item_name, "quantity":item[1], "price":item[0].price})
         db.session.commit()
 
-def get_orders(user_id):
+def get_orders_for_user(user_id):
     sql = ("""SELECT o.id, o.logged_at, r.name
     FROM orders o
     JOIN restaurants r ON o.restaurant_id = r.id
@@ -26,6 +26,17 @@ def get_orders(user_id):
     for order in orders:
         print(order)
     return orders
+
+def get_orders_for_restaurant(restaurant_id):
+    sql = "SELECT * FROM orders WHERE restaurant_id=:restaurant_id"
+    orders = db.session.execute(text(sql), {"restaurant_id":restaurant_id}).fetchall()
+    for order in orders:
+        print(order)
+    return orders
+
+def get_restaurant_id_from_order(order_id):
+    sql  = "SELECT restaurant_id FROM Orders WHERE id=:order_id"
+    restaurant_id = db.session.execute(text(sql), {"order_id":order_id}).fetchone()
 
 def get_order_items(order_id):
     sql = "SELECT * FROM OrderItems WHERE order_id=:order_id"

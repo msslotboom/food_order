@@ -12,7 +12,7 @@ import users, menu, restaurant, order
 
 @app.route("/")
 def index():
-    print(session["restaurant"])
+    # print(session["restaurant"])
     restaurants = db.session.execute(text("SELECT * FROM restaurants")).fetchall()
     owned_restaurants = None
     if "username" in session:
@@ -114,6 +114,7 @@ def add_menu_item(restaurant_id):
 @app.route("/create_menu/modify/<int:item_id>", methods=["POST"])
 def modify_menu_item(item_id):
     user_id = users.get_id_from_username(session["username"])
+    restaurant_id = menu.get_restaurant_id(item_id)
     if restaurant.user_is_restaurant_owner(user_id, restaurant_id) or users.is_admin(user_id):
         item_name = request.form["item_name"]
         description = request.form["description"]
@@ -126,6 +127,7 @@ def modify_menu_item(item_id):
 @app.route("/create_menu/delete/<int:item_id>", methods=["POST"])
 def remove_menu_item(item_id):
     user_id = users.get_id_from_username(session["username"])
+    restaurant_id = menu.get_restaurant_id(item_id)
     if restaurant.user_is_restaurant_owner(user_id, restaurant_id):
         restaurant_id = menu.get_restaurant_id(item_id)
         menu.remove_item(item_id)
@@ -157,7 +159,7 @@ def redirect_to_own_orders():
 def show_orders(user_id):
     id = users.get_id_from_username(session["username"])
     if id == user_id or users.is_admin(session["username"]):
-        orders = order.get_orders(user_id)
+        orders = order.get_orders_for_user(user_id)
         return render_template("order_history.html", orders=orders)
     return render_template("error.html", error="You do not have permissions to see this page!")
 
@@ -170,3 +172,17 @@ def order_info(order_id):
         total_price = order.total_price_of_order(order_id)
         return render_template("order_info.html", ordered_items=ordered_items, total_price=total_price)
     return render_template("error.html", error="You do not have permissions to see this page!")
+
+@app.route("/manage_orders/<int:restaurant_id>")
+def show_all_restaurant_orders(restaurant_id):
+    user_id = users.get_id_from_username(session["username"])
+    if restaurant.user_is_restaurant_owner(user_id, restaurant_id) or users.is_admin(session["username"]):
+        orders = order.get_orders_for_restaurant(restaurant_id)
+        restaurant_name = restaurant.get_restaurant(restaurant_id).name
+        return render_template("restaurant_orders.html", orders=orders, restaurant_name=restaurant_name)
+    return render_template("error.html", error="You do not have permissions to view this site!")
+
+@app.route("/manage_orders/order/<int:order_id>")
+def manage_order(order_id):
+    user_id = users.get_id_from_username(session["username"])
+    restaurant_id = order.get_restaurant_id_from_order(order_id)
