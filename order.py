@@ -36,7 +36,8 @@ def get_orders_for_restaurant(restaurant_id):
 
 def get_restaurant_id_from_order(order_id):
     sql  = "SELECT restaurant_id FROM Orders WHERE id=:order_id"
-    restaurant_id = db.session.execute(text(sql), {"order_id":order_id}).fetchone()
+    restaurant_id = db.session.execute(text(sql), {"order_id":order_id}).fetchone()[0]
+    return restaurant_id
 
 def get_order_items(order_id):
     sql = "SELECT * FROM OrderItems WHERE order_id=:order_id"

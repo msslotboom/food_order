@@ -166,7 +166,8 @@ def show_orders(user_id):
 @app.route("/order_info/<int:order_id>")
 def order_info(order_id):
     user_id = users.get_id_from_username(session["username"])
-    if order.order_owned_by_user(user_id, order_id) or users.is_admin(session["username"]):
+    restaurant_id = order.get_restaurant_id_from_order(order_id)
+    if order.order_owned_by_user(user_id, order_id) or users.is_admin(session["username"]) or restaurant.user_is_restaurant_owner(user_id, restaurant_id):
         ordered_items = order.get_order_items(order_id)
         print("ordered_items:",ordered_items)
         total_price = order.total_price_of_order(order_id)
@@ -182,7 +183,14 @@ def show_all_restaurant_orders(restaurant_id):
         return render_template("restaurant_orders.html", orders=orders, restaurant_name=restaurant_name)
     return render_template("error.html", error="You do not have permissions to view this site!")
 
-@app.route("/manage_orders/order/<int:order_id>")
-def manage_order(order_id):
-    user_id = users.get_id_from_username(session["username"])
-    restaurant_id = order.get_restaurant_id_from_order(order_id)
+# @app.route("/manage_orders/order/<int:order_id>")
+# def manage_order(order_id):
+#     user_id = users.get_id_from_username(session["username"])
+#     restaurant_id = order.get_restaurant_id_from_order(order_id)
+#     print(restaurant_id)
+#     if restaurant.user_is_restaurant_owner(user_id, restaurant_id) or users.is_admin(session["username"]):
+#         ordered_items = order.get_order_items(order_id)
+#         print("ordered_items:",ordered_items)
+#         total_price = order.total_price_of_order(order_id)
+#         return render_template("order_info.html", ordered_items=ordered_items, total_price=total_price)
+#     return render_template("error.html", error="You do not have permissions to view this site!")
