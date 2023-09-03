@@ -18,7 +18,7 @@ def get_restaurants_from_owner_id(user_id):
 
 def user_is_restaurant_owner(user_id, restaurant_id):
     sql = ("SELECT owner_id FROM restaurants WHERE id=:restaurant_id")
-    owner_id = db.session.execute(text(sql), {"restaurant_id":restaurant_id}).fetchone()[0]
+    owner_id = db.session.execute(text(sql), {"restaurant_id":restaurant_id}).fetchall()
     if owner_id == user_id:
         return True
     return False

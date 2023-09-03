@@ -5,7 +5,7 @@
 {% if session.username and not session.restaurant %}
 	<a href="/order_history/myorders">My orders</a> 
 {% elif session.username and session.restaurant %}
-	<a href="/">This is a link only visible for restaurants that currently leads nowhere</a>
+	 <a href="/manage_orders">Manage Orders</a>
 {% endif %}
 <hr>
 {% block content %}{% endblock %}

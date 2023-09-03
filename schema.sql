@@ -27,7 +27,8 @@ CREATE TABLE Orders (
     user_id INTEGER REFERENCES Users,
 	restaurant_id INTEGER REFERENCES Restaurants,
 	total_price INTEGER,
-    logged_at TIMESTAMP
+    logged_at TIMESTAMP,
+	delivered BOOLEAN
 );
 
 CREATE TABLE OrderItems (
