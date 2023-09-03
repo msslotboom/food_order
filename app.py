@@ -108,6 +108,8 @@ def add_menu_item(restaurant_id):
         item_name = request.form["item_name"]
         description = request.form["description"]
         price = int(request.form["price"])
+        if price < 0:
+            return render_template("error.html", error="Price of a menu item can not be negative!")
         menu.add_item(restaurant_id, item_name, description, price)
         return redirect("/create_menu/" + str(restaurant_id))
     return render_template("error.html", error="You do not have permissions to modify this menu!")
@@ -120,6 +122,8 @@ def modify_menu_item(item_id):
         item_name = request.form["item_name"]
         description = request.form["description"]
         price = int(request.form["price"])
+        if price < 0:
+            return render_template("error.html", error="Price of a menu item can not be negative!")
         menu.modify_item(item_id, item_name, description, price)
         restaurant_id = menu.get_restaurant_id(item_id)
         return redirect("/create_menu/" + str(restaurant_id))
@@ -142,9 +146,9 @@ def process_order(restaurant_id):
     tot_price = 0
     for item in menu_items:
         amount = int(request.form[str(item.id)])
-        if amount != 0:
+        if amount > 0:
             ordered_items.append((item, amount))
-        tot_price += item.price * (amount)
+            tot_price += item.price * (amount)
 
     user_id = users.get_id_from_username(session["username"])
     order_id = order.create_order(user_id, restaurant_id, tot_price)
