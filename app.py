@@ -12,7 +12,6 @@ import users, menu, restaurant, order
 
 @app.route("/")
 def index():
-    # print(session["restaurant"])
     restaurants = db.session.execute(text("SELECT * FROM restaurants")).fetchall()
     owned_restaurants = None
     if "username" in session:
