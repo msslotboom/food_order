@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}Order info{% endblock %}
+{% block content %}
+Your Order: <br/>
+{% for item in ordered_items %}
+Name: {{ item.item_name }} 	Amount: {{ item.amount }} Price:{{ item.price * item.quantity}}
+<br/>
+{% endfor %}
+Total Price: {{ total_price }}
+<br/>
+Delivered: {{ delivery_status }} 
+{% if delivery_status == False %}
+<form  action="/manage_orders/set_delivered/{{order_id}}"method="POST">
+	<button type="submit" name="deliver">Click here to set this order to delivered!</button>
+{% endif %}
+{% endblock %}

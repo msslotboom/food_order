@@ -58,3 +58,8 @@ def get_delivery_status(order_id):
     sql = "SELECT delivered from orders WHERE id=:order_id"
     delivery_status = db.session.execute(text(sql), {"order_id":order_id}).fetchone()[0]
     return delivery_status
+
+def set_delivered(order_id):
+    sql = "UPDATE orders SET delivered = TRUE WHERE id=:order_id"
+    db.session.execute(text(sql), {"order_id":order_id})
+    db.session.commit()

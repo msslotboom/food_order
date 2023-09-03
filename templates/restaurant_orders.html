@@ -4,6 +4,6 @@
 <h3>Check the orders made at restaurant {{ restaurant_name }}</h3>
 <br/>
 {% for order in orders %}
-	{{order.name}} {{ order.logged_at.strftime('%Y-%m-%d %H:%M:%S') }} <a href="/order_info/{{order.id}}">Click here for more info</a> <br/>
+	{{order.name}} {{ order.logged_at.strftime('%Y-%m-%d %H:%M:%S') }} <a href="/manage_orders/order/{{order.id}}">Click here for more info</a> <br/>
 {% endfor %}
 {% endblock %}
