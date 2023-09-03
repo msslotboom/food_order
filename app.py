@@ -54,7 +54,9 @@ def create_user():
     restaurant = request.form["restaurant"]
     if users.user_exists(username):
         return render_template("error.html", error="username is already in use! Try another username")
-    if password == password_repeat and users.create_user(username, password, restaurant):
+    if password == password_repeat:
+        return render_template("error.html", error="passwords do not match! Try again")
+    if users.create_user(username, password, restaurant):
         session["username"] = username
         if users.is_user_restaurant(username):
             session["restaurant"] = True
@@ -62,8 +64,7 @@ def create_user():
         session["restaurant"] = False
         return redirect("/")
     else:
-        print("fail")
-        return redirect("/create_user")
+        return render_template("error.html", error="Something went wrong! Try again later")
 
 @app.route("/restaurant/<int:restaurant_id>")
 def restaurant_page(restaurant_id):
